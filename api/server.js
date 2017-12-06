@@ -11,9 +11,9 @@ const server = express()
 server.use(bodyParser.json())
 
 // routes
-//server.use([
-//  require('./routes/rainfalls')
-//])
+server.use([
+  require('./routes/products')
+])
 
 server.listen(7000, (error) => {
   if (error) {
@@ -23,3 +23,4 @@ server.listen(7000, (error) => {
     console.log('Server started at http://localhost:7000')
   }
 })
+
