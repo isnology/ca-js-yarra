@@ -1,0 +1,33 @@
+<RestClientRequest>
+  <option name="biscuits">
+    <list />
+  </option>
+  <option name="httpMethod" value="GET" />
+  <option name="urlBase" value="http://localhost:7000" />
+  <option name="urlPath" value="/products" />
+  <option name="headers">
+    <list>
+      <KeyValuePair>
+        <option name="key" value="Accept" />
+        <option name="value" value="*/*" />
+      </KeyValuePair>
+      <KeyValuePair>
+        <option name="key" value="Content-Type" />
+        <option name="value" value="application/json" />
+      </KeyValuePair>
+      <KeyValuePair>
+        <option name="key" value="Authorization" />
+        <option name="value" value="Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdybWFya3NAZ21haWwuY29tIiwiaWF0IjoxNTEyNTM0OTIwLCJleHAiOjE1MTMxMzk3MjAsInN1YiI6IjVhMjc1MGYzYTA5ZjkzNzczMWQxMzM3NCJ9.AckkynoWBSeN-ezUPi1Yvy6p4ErAJlTr_mhF-Yuw6cw" />
+      </KeyValuePair>
+    </list>
+  </option>
+  <option name="parameters">
+    <list />
+  </option>
+  <option name="parametersEnabled" value="true" />
+  <option name="haveTextToSend" value="false" />
+  <option name="haveFileToSend" value="false" />
+  <option name="isFileUpload" value="false" />
+  <option name="textToSend" value="{   &quot;email&quot;: &quot;grmarks@gmail.com&quot;,   &quot;password&quot;: &quot;123456&quot; }  " />
+  <option name="filesToSend" value="" />
+</RestClientRequest>
