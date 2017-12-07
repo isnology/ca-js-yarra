@@ -20,7 +20,7 @@ function SignInForm({ onSignIn }) {
           />
         </label>
         <label>
-          { 'password' }
+          { 'Password:' }
           <input type='password' id='password' name='password' />
 
         </label>
