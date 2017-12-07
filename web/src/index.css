@@ -1,5 +1,43 @@
 body {
   margin: 0;
   padding: 0;
+  box-size: border-box;
   font-family: sans-serif;
 }
+
+html {
+  font-size: 125%;
+}
+
+body {
+  font-family: sans-serif;
+}
+
+lebel {
+  margin: 0;
+  border: 0;
+  display: block;
+}
+
+h1 {
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.5rem;
+}
+
+input {
+  display: block;
+  width: 100%
+}
+
+button {
+  padding: 0.333rem 0.5rem;
+  background-color: orange;
+  border: none;
+}
+
+.mb-1 { margin-bottom: 0.25rem; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-3 { margin-bottom: 1rem; }
