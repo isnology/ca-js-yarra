@@ -1,13 +1,23 @@
 import React, { Component } from 'react';
 import './App.css';
 import SignInForm from './components/SignInForm'
+import SignUpButton from './components/SignUpButton'
 import { signIn, signOutNow } from './api/auth'
 import { listProducts } from './api/products'
 import { getDecodedToken } from './api/token'
 
+const textForSignUpButton = (value) => value ? 'Back' : 'Sign Up'
+
 class App extends Component {
   state = {
-    decodedToken: getDecodedToken()  // Restore the previous signed in data
+    decodedToken: getDecodedToken(),  // Restore the previous signed in data
+    signUpButton: {
+      value: false,
+    },
+    user: {
+      firstName: null,
+      lastName: null
+    }
   }
 
   onSignIn = ({ email, password }) => {
@@ -24,8 +34,16 @@ class App extends Component {
     this.setState({ decodedToken: null })
   }
 
+  onToggleChange = () => {
+    this.setState(({ signUpButton }) => {
+      signUpButton.value = !signUpButton.value
+      return { signUpButton: signUpButton }
+    })
+  }
+
   render() {
     const { decodedToken } = this.state
+    const { signUpButton } = this.state
 
     return (
       <div className="App">
@@ -34,16 +52,25 @@ class App extends Component {
 
         {
           !!decodedToken ? (
-              <div>
-                <p>Email: { decodedToken.email }</p>
-                <p>Signed in at: { new Date(decodedToken.iat * 1000).toISOString() }</p>
-                <p>Expire at: { new Date(decodedToken.exp * 1000).toISOString() }</p>
-                <button onClick={ this.onSignOut }>
-                  Sign Out
-                </button>
-              </div>
+            <div>
+            <p>Email: { decodedToken.email }</p>
+            <p>Signed in at: { new Date(decodedToken.iat * 1000).toISOString() }</p>
+            <p>Expire at: { new Date(decodedToken.exp * 1000).toISOString() }</p>
+            <button onClick={ this.onSignOut }>
+              Sign Out
+            </button>
+            </div>
           ) : (
-            <SignInForm onSignIn={ this.onSignIn } />
+            <div>
+              <SignInForm onSignIn={ this.onSignIn } display={ signUpButton.value }/>
+              <SignUpButton onToggleChange={ () => {
+                this.onToggleChange()
+              }
+              }
+              >
+                { textForSignUpButton(signUpButton.value) }
+              </SignUpButton>
+            </div>
           )
         }
       </div>
