@@ -4,6 +4,7 @@ const { requireJWT } = require('../middleware/auth')
 
 const router = new express.Router()
 
+// read list
 router.get('/wishlist', requireJWT, (req, res) => {
   Wishlist.findOne({ User: req.user })
   .then((wishlist) => {
@@ -17,6 +18,44 @@ router.get('/wishlist', requireJWT, (req, res) => {
   })
   .catch((error) => {
     res.status(500).json({ error })
+  })
+})
+
+// add product to wishlist
+router.post('/wishlist/products/:productId', requireJWT, (req, res) => {
+  const { productId } = req.params
+  Wishlist.findOneAndUpdate(
+      // find the wishlist for the signed in user
+      { user: req.user },
+      // make changes (add new entry only once) https://docs.mongodb.com/manual/reference/operator/
+      { $addToSet: { products: productId } },
+      // options when updating
+      { upsert: true , runValidators: true }
+    )
+    .then((wishlist) => {
+      res.json({ products: wishlist.products })
+    })
+    .catch((error) => {
+      res.status(400).json({ error })
+    })
+})
+
+// remove products from wishlist
+router.delete('/wishlist/products/:productId', requireJWT, (req, res) => {
+  const { productId } = req.params
+  Wishlist.findOneAndUpdate(
+      // find the wishlist for the signed in user
+      { user: req.user },
+      // make changes (add new entry only once) https://docs.mongodb.com/manual/reference/operator/
+      { $pull: { products: productId } },
+      // options when updating
+      { upsert: true , runValidators: true }
+  )
+  .then((wishlist) => {
+    res.json({ products: wishlist.products })
+  })
+  .catch((error) => {
+    res.status(400).json({ error })
   })
 })
 
