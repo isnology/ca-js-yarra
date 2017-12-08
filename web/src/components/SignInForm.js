@@ -3,12 +3,13 @@ import React from 'react'
 function SignInForm({ onSignIn, onSignUp, display = false }) {
   return (
     <form
-        onSubmit={ (event) => {
+      onSubmit={ (event) => {
           event.preventDefault()
           const form = event.target
           const elements = form.elements
           const email = elements.email.value
           const password = elements.password.value
+          console.log('display:', display)
           if (display) {
             const firstName = elements.firstName.value
             const lastName = elements.lastName.value
@@ -17,7 +18,8 @@ function SignInForm({ onSignIn, onSignUp, display = false }) {
           else {
             onSignIn({ email, password })
           }
-        } }
+        }
+      }
     >
       { !!display &&
         <div>

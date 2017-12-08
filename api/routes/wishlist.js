@@ -7,6 +7,7 @@ const router = new express.Router()
 // read list
 router.get('/wishlist', requireJWT, (req, res) => {
   Wishlist.findOne({ User: req.user })
+  .populate('products')
   .then((wishlist) => {
     if (wishlist) {
       res.json({ products: wishlist.products })
@@ -32,6 +33,7 @@ router.post('/wishlist/products/:productId', requireJWT, (req, res) => {
       // options when updating
       { upsert: true , runValidators: true }
     )
+    .populate('products')
     .then((wishlist) => {
       res.json({ products: wishlist.products })
     })
@@ -51,6 +53,7 @@ router.delete('/wishlist/products/:productId', requireJWT, (req, res) => {
       // options when updating
       { upsert: true , runValidators: true }
   )
+  .populate('products')
   .then((wishlist) => {
     res.json({ products: wishlist.products })
   })

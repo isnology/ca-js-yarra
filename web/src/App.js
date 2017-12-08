@@ -2,8 +2,10 @@ import React, { Component } from 'react';
 import './App.css';
 import SignInForm from './components/SignInForm'
 import SignUpButton from './components/SignUpButton'
+import ProductList from './components/ProductList'
+import ProductForm from './components/ProductForm'
 import { signIn, signUp, signOutNow } from './api/auth'
-import { listProducts } from './api/products'
+import { listProducts, createProduct, updateProduct } from './api/products'
 import { getDecodedToken } from './api/token'
 
 const textForSignUpButton = (value) => value ? 'Back' : 'Sign Up'
@@ -47,9 +49,21 @@ class App extends Component {
     })
   }
 
+  onCreateProduct = (productData) => {
+    createProduct(productData)
+    .then((newProduct) => {
+      this.setState((prevState) => {
+        // Append to existing products array
+        const updatedProducts = prevState.products.concat(newProduct)
+        return {
+          products: updatedProducts
+        }
+      })
+    })
+  }
+
   render() {
-    const { decodedToken } = this.state
-    const { signUpButton } = this.state
+    const { decodedToken, signUpButton, products } = this.state
 
     return (
       <div className="App">
@@ -59,12 +73,18 @@ class App extends Component {
         {
           !!decodedToken ? (
             <div>
-            <p>Email: { decodedToken.email }</p>
-            <p>Signed in at: { new Date(decodedToken.iat * 1000).toISOString() }</p>
-            <p>Expire at: { new Date(decodedToken.exp * 1000).toISOString() }</p>
-            <button onClick={ this.onSignOut }>
-              Sign Out
-            </button>
+              <p>Email: { decodedToken.email }</p>
+              <p>Signed in at: { new Date(decodedToken.iat * 1000).toISOString() }</p>
+              <p>Expire at: { new Date(decodedToken.exp * 1000).toISOString() }</p>
+              <button onClick={ this.onSignOut }>
+                Sign Out
+              </button>
+              <br />
+              { products &&
+                <ProductList products={ products } />
+              }
+              <br />
+              <ProductForm onProduct={ this.onCreateProduct } action={ 'Create' } />
             </div>
           ) : (
             <div>
@@ -82,14 +102,37 @@ class App extends Component {
       </div>
     );
   }
+
+  load() {
+    const { decodedToken } = this.state
+    if (decodedToken) {
+      listProducts()
+      .then((products) => {
+        this.setState({ products })
+      })
+      .catch((error) => {
+        console.error('error loading products', error)
+      })
+    }
+    else {
+      this.setState({
+        products: null
+      })
+    }
+  }
+
+  // When this App first appears on screen
   componentDidMount() {
-   listProducts()
-   .then((products) => {
-     console.log(products)
-   })
-    .catch((error) => {
-      console.error('error')
-    })
+    this.load()
+  }
+
+  // When state changes
+  componentDidUpdate(prevProps, prevState) {
+    // If just signed in, signed up, or signed out,
+    // then the token will have changed
+    if (this.state.decodedToken !== prevState.decodedToken) {
+      this.load()
+    }
   }
 }
 
