@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import SignInForm from './components/SignInForm'
 import SignUpButton from './components/SignUpButton'
-import { signIn, signOutNow } from './api/auth'
+import { signIn, signUp, signOutNow } from './api/auth'
 import { listProducts } from './api/products'
 import { getDecodedToken } from './api/token'
 
@@ -14,10 +14,7 @@ class App extends Component {
     signUpButton: {
       value: false,
     },
-    user: {
-      firstName: null,
-      lastName: null
-    }
+    products: null
   }
 
   onSignIn = ({ email, password }) => {
@@ -25,6 +22,15 @@ class App extends Component {
     signIn({ email, password })
     .then((decodedToken) => {
       console.log('signed in:', decodedToken)
+      this.setState({ decodedToken })
+    })
+  }
+
+  onSignUp = ({ email, password, firstName, lastName }) => {
+    console.log('App received:', { email, password, firstName, lastName })
+    signUp({ email, password , firstName, lastName })
+    .then((decodedToken) => {
+      console.log('signed up:', decodedToken)
       this.setState({ decodedToken })
     })
   }
@@ -62,7 +68,7 @@ class App extends Component {
             </div>
           ) : (
             <div>
-              <SignInForm onSignIn={ this.onSignIn } display={ signUpButton.value }/>
+              <SignInForm onSignIn={ this.onSignIn } onSignUp={ this.onSignUp } display={ signUpButton.value }/>
               <SignUpButton onToggleChange={ () => {
                 this.onToggleChange()
               }

@@ -1,48 +1,6 @@
 import React from 'react'
 
-function SignUp1({display}) {
-    return (
-      <div>
-        { !!display &&
-          <div>
-            <label>
-              { 'First Name: ' }
-              <input
-                  type='text'
-                  name='firstName'
-              />
-            </label>
-            <label>
-              { 'Last Name: ' }
-              <input
-                  type='text'
-                  name='lastName'
-              />
-            </label>
-          </div>
-        }
-      </div>
-    )
-
-}
-
-function SignUp2({display}) {
-    return (
-        <div>
-          { !!display &&
-            <label>
-              { 'Confirm Password: ' }
-              <input
-                  type='password'
-                  name='confirm'
-              />
-            </label>
-          }
-        </div>
-    )
-}
-
-function SignInForm({ onSignIn, display = false }) {
+function SignInForm({ onSignIn, onSignUp, display = false }) {
   return (
     <form
         onSubmit={ (event) => {
@@ -51,10 +9,34 @@ function SignInForm({ onSignIn, display = false }) {
           const elements = form.elements
           const email = elements.email.value
           const password = elements.password.value
-          onSignIn({ email, password })
+          if (display) {
+            const firstName = elements.firstName.value
+            const lastName = elements.lastName.value
+            onSignUp({ email, password , firstName, lastName})
+          }
+          else {
+            onSignIn({ email, password })
+          }
         } }
     >
-      <SignUp1 display={ display } />
+      { !!display &&
+        <div>
+          <label>
+            { 'First Name: ' }
+            <input
+                type='text'
+                name='firstName'
+            />
+          </label>
+          <label>
+            { 'Last Name: ' }
+            <input
+                type='text'
+                name='lastName'
+            />
+          </label>
+        </div>
+      }
       <label>
         { 'Email: ' }
         <input
@@ -67,9 +49,17 @@ function SignInForm({ onSignIn, display = false }) {
         <input type='password' id='password' name='password'/>
 
       </label>
-      <SignUp2 display={ display } />
+      { !!display &&
+        <label>
+          { 'Confirm Password: ' }
+          <input
+              type='password'
+              name='confirm'
+          />
+        </label>
+      }
       <button>
-        Sign In
+        { !!display ? 'Sign Up' : 'Sign In' }
       </button>
 
     </form>
